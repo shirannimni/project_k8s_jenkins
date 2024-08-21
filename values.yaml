@@ -140,7 +140,7 @@ master:
   usePodSecurityContext: true
   # Set runAsUser to 1000 to let Jenkins run as non-root user 'jenkins' which exists in 'jenkins/jenkins' docker image.
   # When setting runAsUser to a different value than 0 also set fsGroup to the same value:
-  runAsUser: 1000
+  runAsUser: 0
   fsGroup: 1000
   servicePort: 8080
   targetPort: 8080
@@ -604,7 +604,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: jenkins-pv
   annotations: {}
   accessMode: "ReadWriteOnce"
   size: "8Gi"

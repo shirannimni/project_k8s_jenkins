@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-time-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flask-time-app
+  template:
+    metadata:
+      labels:
+        app: flask-time-app
+    spec:
+      containers:
+      - name: flask-time-app
+        image: shirannimni/flask-time-app:v1
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-time-app-service
+spec:
+  selector:
+    app: flask-time-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: ClusterIP
