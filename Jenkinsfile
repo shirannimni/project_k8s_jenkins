@@ -5,6 +5,7 @@ pipeline {
         stage('Unit Test') {
             steps {
                 script {
+                    sh "apt-get install python3"
                     sh 'pip install -r requirements.txt'
                     def testResult = sh(script: 'python -m pytest test_app.py', returnStatus: true)
                     if (testResult != 0) {
