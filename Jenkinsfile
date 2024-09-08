@@ -5,7 +5,11 @@ pipeline {
         stage('Unit Test') {
             steps {
                 script {
-                    sh "apt-get install python3"
+                    sh "mkdir -p $HOME/python
+                    cd $HOME/python
+                    curl -L https://github.com/indygreg/python-build-standalone/releases/download/20230507/cpython-3.9.16+20230507-x86_64-unknown-linux-gnu-install_only.tar.gz | tar xz --strip-components=1
+                    export PATH="$HOME/python/bin:$PATH""
+                    sh " pip install --upgrade pip"
                     sh 'pip install -r requirements.txt'
                     def testResult = sh(script: 'python -m pytest test_app.py', returnStatus: true)
                     if (testResult != 0) {
