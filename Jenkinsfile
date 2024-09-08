@@ -13,6 +13,7 @@ pipeline {
                 ./bin/pip install --upgrade pip
                 git clone https://github.com/shirannimni/project_k8s_jenkins.git
                 ls && pwd
+                ./bin/pip install -r ./project_k8s_jenkins/src/requirements.txt
                 ./bin/pip install -r /var/jenkins_home/.pyenv/plugins/python-build/scripts/requirements.txt
             """
             def testResult = sh(script: '\$HOME/python/bin/python -m pytest test_app.py', returnStatus: true)
