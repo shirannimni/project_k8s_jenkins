@@ -11,7 +11,7 @@ pipeline {
                 curl -L https://github.com/indygreg/python-build-standalone/releases/download/20230507/cpython-3.9.16+20230507-x86_64-unknown-linux-gnu-install_only.tar.gz | tar xz --strip-components=1
                 export PATH="\$HOME/python/bin:\$PATH"
                 ./bin/pip install --upgrade pip
-                https://github.com/shirannimni/project_k8s_jenkins.git
+                git clone https://github.com/shirannimni/project_k8s_jenkins.git
                 ./bin/pip install -r /var/jenkins_home/.pyenv/plugins/python-build/scripts/requirements.txt
             """
             def testResult = sh(script: '\$HOME/python/bin/python -m pytest test_app.py', returnStatus: true)
