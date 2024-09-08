@@ -15,7 +15,7 @@ pipeline {
                 ls && pwd
                 ./bin/pip install -r ./project_k8s_jenkins/src/requirements.txt
             """
-            def testResult = sh(script: '\$HOME/python/bin/python -m pytest test_app.py', returnStatus: true)
+            def testResult = sh(script: '\$HOME/python/bin/python3 -m pytest test_app.py', returnStatus: true)
             if (testResult != 0) {
                 error "Unit tests failed. Background is not blue."
             }
