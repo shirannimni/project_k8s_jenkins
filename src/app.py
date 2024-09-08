@@ -36,3 +36,9 @@ def home():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
+def get_background_color():
+    return "blue"
+
+if __name__ == "__main__":
+    print(f"The background color is: {get_background_color()}")    

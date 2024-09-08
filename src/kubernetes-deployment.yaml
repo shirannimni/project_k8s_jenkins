@@ -17,6 +17,7 @@ spec:
         image: shirannimni/flask-time-app:v1
         ports:
         - containerPort: 5000
+
 ---
 apiVersion: v1
 kind: Service
