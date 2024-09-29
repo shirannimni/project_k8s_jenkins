@@ -24,12 +24,12 @@ pipeline {
                         pip3 --version || echo "Pip3 installation failed"
 
                         # If installations failed, try an alternative method
-                        if ! command -v python3 &> /dev/null; then
-                            echo "Trying alternative Python3 installation method"
-                            add-apt-repository ppa:deadsnakes/ppa -y
-                            apt-get update
-                            apt-get install -y python3.8 python3-pip
-                        fi
+                        #if ! command -v python3 &> /dev/null; then
+                         #   echo "Trying alternative Python3 installation method"
+                          #  add-apt-repository ppa:deadsnakes/ppa -y
+                           # apt-get update
+                            #apt-get install -y python3.8 python3-pip
+                        #fi
 
                         # Verify installations again
                         python3 --version
