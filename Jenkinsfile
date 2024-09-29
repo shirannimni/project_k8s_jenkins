@@ -48,7 +48,7 @@ pipeline {
                    #  export PATH="\$HOME/python/bin:\$PATH"
                    # apt install -y git 
                    git clone https://github.com/shirannimni/project_k8s_jenkins.git
-                   python --version
+                   
                    python3 --version
                    ls && pwd
                    ./bin/pip install -r ./project_k8s_jenkins/src/requirements.txt
