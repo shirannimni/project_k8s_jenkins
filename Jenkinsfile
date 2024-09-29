@@ -19,6 +19,19 @@ pipeline {
 
                         # Verify git installation
                         git --version
+
+                        # Check for Python
+                        which python3 || echo "Python3 not found"
+                        which python || echo "Python not found"
+
+                        # If Python is not found, install it
+                        if ! which python3 && ! which python; then
+                            apt-get install -y python3 python3-pip || true
+                        fi
+
+                        # Verify Python installation
+                        python3 --version || echo "Python3 installation failed"
+                        pip3 --version || echo "Pip3 installation failed"
                     """
                 }
             }
