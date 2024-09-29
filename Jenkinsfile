@@ -15,6 +15,8 @@ pipeline {
                 ls && pwd
                 ./bin/pip install -r ./project_k8s_jenkins/src/requirements.txt
             """
+            sh 'ls -R $HOME/python/project_k8s_jenkins'
+            sh 'pwd'
             def testResult = sh(script: '$HOME/python/bin/python3 -m pytest $HOME/python/project_k8s_jenkins/src/test_app.py', returnStatus: true)
 
             // def testResult = sh(script: '\$HOME/python/bin/python3 -m pytest ./project_k8s_jenkins/src/test_app.py', returnStatus: true)
