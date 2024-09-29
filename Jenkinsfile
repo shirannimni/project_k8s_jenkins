@@ -34,6 +34,9 @@ pipeline {
                         # Verify installations again
                         python3 --version
                         pip3 --version
+
+                         # Upgrade pip to the latest version
+                        python3 -m pip install --upgrade pip
                     """
                 }
             }
