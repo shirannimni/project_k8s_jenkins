@@ -16,6 +16,7 @@ pipeline {
                # curl -L https://github.com/indygreg/python-build-standalone/releases/download/20230507/cpython-3.9.16+20230507-x86_64-unknown-linux-gnu-install_only.tar.gz | tar xz --strip-components=1
                #  export PATH="\$HOME/python/bin:\$PATH"
                 ./bin/pip install --upgrade pip
+                sleep 600
                 git clone https://github.com/shirannimni/project_k8s_jenkins.git
                 ls && pwd
                 ./bin/pip install -r ./project_k8s_jenkins/src/requirements.txt
