@@ -7,29 +7,47 @@ pipeline {
     }
 
     stages {
-       stage('Unit Test') {
-    steps {
-        script {
-            sh """
-                mkdir -p \$HOME/python
-                cd \$HOME/python
-               # curl -L https://github.com/indygreg/python-build-standalone/releases/download/20230507/cpython-3.9.16+20230507-x86_64-unknown-linux-gnu-install_only.tar.gz | tar xz --strip-components=1
-               #  export PATH="\$HOME/python/bin:\$PATH"
-               # apt install -y git 
-                git clone https://github.com/shirannimni/project_k8s_jenkins.git
-                python --version
-                python3 --version
-                ls && pwd
-                ./bin/pip install -r ./project_k8s_jenkins/src/requirements.txt
-            """
-            sh 'ls -R $HOME/python/project_k8s_jenkins'
-            sh 'pwd'
-            sh "ls -la && echo $HOME"
-            def testResult = sh(script: '$HOME/python/bin/python3 -m pytest $HOME/python/project_k8s_jenkins/src/test_app.py', returnStatus: true)
+        stage('Setup Environment') {
+            steps {
+                script {
+                    sh """
+                        # Update package lists
+                        apt-get update || true
 
-            // def testResult = sh(script: '\$HOME/python/bin/python3 -m pytest ./project_k8s_jenkins/src/test_app.py', returnStatus: true)
-            if (testResult != 0) {
-                error "Unit tests failed. Background is not blue."
+                        # Install git
+                        apt-get install -y git || true
+
+                        # Verify git installation
+                        git --version
+                    """
+                }
+            }
+        }
+
+
+        stage('Unit Test') {
+            steps {
+                script {
+                   sh """
+                   mkdir -p \$HOME/python
+                   cd \$HOME/python
+                   # curl -L https://github.com/indygreg/python-build-standalone/releases/download/20230507/cpython-3.9.16+20230507-x86_64-unknown-linux-gnu-install_only.tar.gz | tar xz --strip-components=1
+                   #  export PATH="\$HOME/python/bin:\$PATH"
+                   # apt install -y git 
+                   git clone https://github.com/shirannimni/project_k8s_jenkins.git
+                   python --version
+                   python3 --version
+                   ls && pwd
+                   ./bin/pip install -r ./project_k8s_jenkins/src/requirements.txt
+                   """
+                  sh 'ls -R $HOME/python/project_k8s_jenkins'
+                  sh 'pwd'
+                  sh "ls -la && echo $HOME"
+                  def testResult = sh(script: '$HOME/python/bin/python3 -m pytest $HOME/python/project_k8s_jenkins/src/test_app.py', returnStatus: true)
+
+              // def testResult = sh(script: '\$HOME/python/bin/python3 -m pytest ./project_k8s_jenkins/src/test_app.py', returnStatus: true)
+                 if (testResult != 0) {
+                 error "Unit tests failed. Background is not blue."
             }
         }
     }
