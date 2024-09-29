@@ -17,6 +17,7 @@ pipeline {
             """
             sh 'ls -R $HOME/python/project_k8s_jenkins'
             sh 'pwd'
+            sh "ls -la && echo $HOME"
             def testResult = sh(script: '$HOME/python/bin/python3 -m pytest $HOME/python/project_k8s_jenkins/src/test_app.py', returnStatus: true)
 
             // def testResult = sh(script: '\$HOME/python/bin/python3 -m pytest ./project_k8s_jenkins/src/test_app.py', returnStatus: true)
