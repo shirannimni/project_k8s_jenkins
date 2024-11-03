@@ -19,40 +19,40 @@ pipeline {
     }
 
     stages {
-        stage('Setup Environment') {
-            steps {
-                script {
-                    sh """
-                         # Update package lists and try to fix potential issues
-                        apt-get update || true
-                        apt-get install -y --fix-missing || true
+        // stage('Setup Environment') {
+        //     steps {
+        //         script {
+        //             sh """
+        //                  # Update package lists and try to fix potential issues
+        //                 apt-get update || true
+        //                 apt-get install -y --fix-missing || true
 
-                        # Install git, python3, and pip3
-                        apt-get install -y git python3 python3-pip || true
+        //                 # Install git, python3, and pip3
+        //                 apt-get install -y git python3 python3-pip || true
 
-                        # Verify installations
-                        git --version || echo "Git installation failed"
-                        python3 --version || echo "Python3 installation failed"
-                        pip3 --version || echo "Pip3 installation failed"
+        //                 # Verify installations
+        //                 git --version || echo "Git installation failed"
+        //                 python3 --version || echo "Python3 installation failed"
+        //                 pip3 --version || echo "Pip3 installation failed"
 
-                        # If installations failed, try an alternative method
-                        if ! command -v python3 &> /dev/null; then
-                            echo "Trying alternative Python3 installation method"
-                            add-apt-repository ppa:deadsnakes/ppa -y
-                            apt-get update
-                            apt-get install -y python3.8 python3-pip
-                        fi
+        //                 # If installations failed, try an alternative method
+        //                 if ! command -v python3 &> /dev/null; then
+        //                     echo "Trying alternative Python3 installation method"
+        //                     add-apt-repository ppa:deadsnakes/ppa -y
+        //                     apt-get update
+        //                     apt-get install -y python3.8 python3-pip
+        //                 fi
 
-                        # Verify installations again
-                        python3 --version
-                        pip3 --version
+        //                 # Verify installations again
+        //                 python3 --version
+        //                 pip3 --version
 
-                         # Upgrade pip to the latest version
-                        python3 -m pip install --upgrade pip
-                    """
-                }
-            }
-        }
+        //                  # Upgrade pip to the latest version
+        //                 python3 -m pip install --upgrade pip
+        //             """
+        //         }
+        //     }
+        // }
 
 
         stage('Unit Test') {
