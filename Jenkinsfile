@@ -1,8 +1,20 @@
 pipeline {
-     agent {
-        kubernetes {
-            label 'main'
-            // defaultContainer 'python'
+    
+    agent {
+       kubernetes {
+            yaml """
+                apiVersion: v1
+                kind: Pod
+                spec:
+                  containers:
+                  - name: python
+                    image: python:3.9
+                    command:
+                    - sleep
+                    args:
+                    - 99d
+                    tty: true
+            """
         }
     }
 
