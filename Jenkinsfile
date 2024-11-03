@@ -43,7 +43,6 @@ pipeline {
                         #  export PATH="\$HOME/python/bin:\$PATH"
                         # apt install -y git 
                         git clone https://github.com/shirannimni/project_k8s_jenkins.git
-                        sleep 60
                         python3 --version
                         ls && pwd
                         pip3 install -r ./project_k8s_jenkins/src/requirements.txt
@@ -51,7 +50,7 @@ pipeline {
                         sh 'ls -R $HOME/python/project_k8s_jenkins'
                         sh 'pwd'
                         sh "ls -la && echo $HOME"
-                        def testResult = sh(script: '$HOME/python/bin/python3 -m pytest $HOME/python/project_k8s_jenkins/src/test_app.py', returnStatus: true)
+                        def testResult = sh(script: 'python3 -m pytest $HOME/python/project_k8s_jenkins/src/test_app.py', returnStatus: true)
 
                     // def testResult = sh(script: '\$HOME/python/bin/python3 -m pytest ./project_k8s_jenkins/src/test_app.py', returnStatus: true)
                         if (testResult != 0) {
