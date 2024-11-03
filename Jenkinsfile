@@ -1,14 +1,14 @@
 pipeline {
     
     agent {
-       kubernetes {
+        kubernetes {
             yaml """
                 apiVersion: v1
                 kind: Pod
                 spec:
-                  containers:
-                  - name: python
-                    image: python:3.9
+                containers:
+                - name: ubuntu
+                    image: ubuntu:22.04
                     command:
                     - sleep
                     args:
