@@ -8,12 +8,12 @@ pipeline {
                 spec:
                 containers:
                 - name: ubuntu
-                    image: ubuntu:22.04
-                    command:
-                    - sleep
-                    args:
-                    - 99d
-                    tty: true
+                  image: ubuntu:22.04
+                  command:
+                  - sleep
+                  args:
+                  - 99d
+                  tty: true
             """
         }
     }
