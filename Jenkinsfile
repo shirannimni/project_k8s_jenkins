@@ -114,29 +114,9 @@ pipeline {
                         """
                     }
                 }
-                // script {
-                //     def dockerImage = docker.build("my-app:${env.BUILD_NUMBER}")
-                //     dockerImage.tag("latest")
-                // }
             }
         }
         
-        // stage('Push') {
-        //     steps {
-        //         script {
-        //             docker.withRegistry('https://hub.docker.com/repository/docker/shirannimni/flask-time-app/general', 'docker-credentials-id') {
-        //                 def dockerImage = docker.image("my-app:${env.BUILD_NUMBER}")
-        //                 dockerImage.push()
-        //                 dockerImage.push("latest")
-
-                    
-                      
-        //             }
-                    
-                    
-        //         }
-        //     }
-        // }
 
         stage('Push') {
             steps {
