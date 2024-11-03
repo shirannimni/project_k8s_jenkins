@@ -136,15 +136,7 @@ pipeline {
     }
 }
         
-        // stage('Email') {
-        //     steps {
-        //         emailext (
-        //             subject: "Pipeline Status: ${currentBuild.result}",
-        //             body: "Build ${env.BUILD_NUMBER} completed. Status: ${currentBuild.result}",
-        //             to: 'nimnishiran@gmail.com'
-        //         )
-        //     }
-        // }
+       
         stage('Email') {
             steps {
                 container('ubuntu') {  // Ensure we're in the container context
@@ -185,21 +177,5 @@ pipeline {
                 }
             }
         }
-
-        // stage('Email') {
-        //     steps {
-        //         script {
-        //             emailext (
-        //                 to: 'nimnishiran@gmail.com',
-        //                 subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
-        //                 body: """<p>Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}</p>
-        //                     <p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>
-        //                     <p>Docker image pushed: shirannimni/flask-time-app:${env.BUILD_NUMBER}</p>""",
-        //                 mimeType: 'text/html',
-        //                 attachLog: true
-        //             )
-        //         }
-        //    }
-        // }
     }
 }
