@@ -14,13 +14,35 @@ pipeline {
                     - 99d
                     tty: true
             """
+            yaml """
+                apiVersion: v1
+                kind: Pod
+                spec:
+                  containers:
+                  - name: ubuntu
+                    image: ubuntu:22.04
+                    command:
+                    - sleep
+                    args:
+                    - 99d
+                    tty: true
+                    securityContext:
+                      privileged: true
+                    volumeMounts:
+                      - name: docker-socket
+                        mountPath: /var/run/docker.sock
+                  volumes:
+                    - name: docker-socket
+                      hostPath:
+                        path: /var/run/docker.sock
+            """
         }
     }
 
     stages {
         stage('Setup Environment') {
             steps {
-                container('ubuntu') {    // Explicitly specify ubuntu container
+                container('ubuntu') {    
                     sh """
                         apt-get update
                         apt-get install -y git python3 python3-pip
@@ -93,10 +115,20 @@ pipeline {
         }
         stage('Build & Tag') {
             steps {
-                script {
-                    def dockerImage = docker.build("my-app:${env.BUILD_NUMBER}")
-                    dockerImage.tag("latest")
+                container('ubuntu') {
+                    script {
+                        // Make sure we're in the directory with the Dockerfile
+                        sh """
+                            cd project_k8s_jenkins
+                            docker build -t my-app:${env.BUILD_NUMBER} .
+                            docker tag my-app:${env.BUILD_NUMBER} my-app:latest
+                        """
+                    }
                 }
+                // script {
+                //     def dockerImage = docker.build("my-app:${env.BUILD_NUMBER}")
+                //     dockerImage.tag("latest")
+                // }
             }
         }
         
