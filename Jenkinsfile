@@ -136,14 +136,70 @@ pipeline {
     }
 }
         
+        // stage('Email') {
+        //     steps {
+        //         emailext (
+        //             subject: "Pipeline Status: ${currentBuild.result}",
+        //             body: "Build ${env.BUILD_NUMBER} completed. Status: ${currentBuild.result}",
+        //             to: 'nimnishiran@gmail.com'
+        //         )
+        //     }
+        // }
         stage('Email') {
             steps {
-                emailext (
-                    subject: "Pipeline Status: ${currentBuild.result}",
-                    body: "Build ${env.BUILD_NUMBER} completed. Status: ${currentBuild.result}",
-                    to: 'nimnishiran@gmail.com'
-                )
+                container('ubuntu') {  // Ensure we're in the container context
+                    script {
+                        def buildStatus = currentBuild.result ?: 'SUCCESS'
+                        def recipientEmail = 'nimnishiran@gmail.com'
+                        
+                        // Use withCredentials to securely access email credentials
+                        withCredentials([usernamePassword(
+                            credentialsId: 'email-auth', // Make sure this ID matches your Jenkins credentials
+                            usernameVariable: 'EMAIL_USER',
+                            passwordVariable: 'EMAIL_PASSWORD'
+                        )]) {
+                            mail(
+                                to: recipientEmail,
+                                subject: "Pipeline Status: ${buildStatus} - Build #${env.BUILD_NUMBER}",
+                                body: """
+                                    Pipeline Status: ${buildStatus}
+                                    
+                                    Build Number: ${env.BUILD_NUMBER}
+                                    Build URL: ${env.BUILD_URL}
+                                    
+                                    Docker Image: shirannimni/flask-time-app:${env.BUILD_NUMBER}
+                                    
+                                    This is an automated email from Jenkins.
+                                """,
+                                charset: 'UTF-8'
+                            )
+                            
+                            echo "Email notification sent to ${recipientEmail}"
+                        }
+                    }
+                }
+            }
+            post {
+                failure {
+                    echo "Failed to send email notification"
+                }
             }
         }
+
+        // stage('Email') {
+        //     steps {
+        //         script {
+        //             emailext (
+        //                 to: 'nimnishiran@gmail.com',
+        //                 subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
+        //                 body: """<p>Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}</p>
+        //                     <p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>
+        //                     <p>Docker image pushed: shirannimni/flask-time-app:${env.BUILD_NUMBER}</p>""",
+        //                 mimeType: 'text/html',
+        //                 attachLog: true
+        //             )
+        //         }
+        //    }
+        // }
     }
 }
