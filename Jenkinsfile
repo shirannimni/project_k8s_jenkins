@@ -1,19 +1,7 @@
 pipeline {
     agent {
         kubernetes {
-            yaml """
-                apiVersion: v1
-                kind: Pod
-                spec:
-                  containers:
-                  - name: ubuntu
-                    image: ubuntu:22.04
-                    command:
-                    - sleep
-                    args:
-                    - 99d
-                    tty: true
-            """
+            
             yaml """
                 apiVersion: v1
                 kind: Pod
@@ -117,8 +105,9 @@ pipeline {
             steps {
                 container('ubuntu') {
                     script {
-                        // Make sure we're in the directory with the Dockerfile
+                        
                         sh """
+                            service docker start || true
                             cd ./project_k8s_jenkins/src
                             docker build -t my-app:${env.BUILD_NUMBER} .
                             docker tag my-app:${env.BUILD_NUMBER} my-app:latest
@@ -132,26 +121,40 @@ pipeline {
             }
         }
         
+        // stage('Push') {
+        //     steps {
+        //         script {
+        //             docker.withRegistry('https://hub.docker.com/repository/docker/shirannimni/flask-time-app/general', 'docker-credentials-id') {
+        //                 def dockerImage = docker.image("my-app:${env.BUILD_NUMBER}")
+        //                 dockerImage.push()
+        //                 dockerImage.push("latest")
+
+                    
+                      
+        //             }
+                    
+                    
+        //         }
+        //     }
+        // }
+
         stage('Push') {
             steps {
-                script {
-                    docker.withRegistry('https://hub.docker.com/repository/docker/shirannimni/flask-time-app/general', 'docker-credentials-id') {
-                        def dockerImage = docker.image("my-app:${env.BUILD_NUMBER}")
-                        dockerImage.push()
-                        dockerImage.push("latest")
-
-                    // withCredentials([usernamePassword(credentialsId: 'docker-credentials-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    //         sh """
-                    //             echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
-                    //             docker push my-app:${env.BUILD_NUMBER}
-                    //             docker push my-app:latest
-                    //         """    
-                    }
-                    
-                    
+                container('ubuntu') {
+                    script {
+                        withCredentials([usernamePassword(credentialsId: 'docker-credentials-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                            sh """
+                                echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
+                                docker tag my-app:${env.BUILD_NUMBER} shirannimni/flask-time-app:${env.BUILD_NUMBER}
+                                docker tag my-app:${env.BUILD_NUMBER} shirannimni/flask-time-app:latest
+                                docker push shirannimni/flask-time-app:${env.BUILD_NUMBER}
+                                docker push shirannimni/flask-time-app:latest
+                            """    
                 }
             }
         }
+    }
+}
         
         stage('Email') {
             steps {
