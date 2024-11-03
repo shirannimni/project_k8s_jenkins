@@ -2,7 +2,7 @@ pipeline {
      agent {
         kubernetes {
             label 'main'
-            defaultContainer 'python'
+            // defaultContainer 'python'
         }
     }
 
