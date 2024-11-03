@@ -119,7 +119,7 @@ pipeline {
                     script {
                         // Make sure we're in the directory with the Dockerfile
                         sh """
-                            cd project_k8s_jenkins
+                            cd ./project_k8s_jenkins/src
                             docker build -t my-app:${env.BUILD_NUMBER} .
                             docker tag my-app:${env.BUILD_NUMBER} my-app:latest
                         """
@@ -139,6 +139,13 @@ pipeline {
                         def dockerImage = docker.image("my-app:${env.BUILD_NUMBER}")
                         dockerImage.push()
                         dockerImage.push("latest")
+
+                    // withCredentials([usernamePassword(credentialsId: 'docker-credentials-id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    //         sh """
+                    //             echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
+                    //             docker push my-app:${env.BUILD_NUMBER}
+                    //             docker push my-app:latest
+                    //         """    
                     }
                     
                     
