@@ -26,6 +26,36 @@ pipeline {
                         apt-get install -y git python3 python3-pip
                         python3 --version
                         pip3 --version
+                        # Update package lists
+                        apt-get update
+                        
+                        # Install prerequisites
+                        apt-get install -y \
+                            ca-certificates \
+                            curl \
+                            gnupg \
+                            lsb-release \
+                            git \
+                            python3 \
+                            python3-pip
+
+                        # Add Docker's official GPG key
+                        mkdir -p /etc/apt/keyrings
+                        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+                        # Set up Docker repository
+                        echo \
+                            "deb [arch=\$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+                            \$(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+                        # Update package list again
+                        apt-get update
+
+                        # Install Docker
+                        apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+                        # Verify Docker installation
+                        docker --version
                     """
                 }
             }
@@ -37,19 +67,13 @@ pipeline {
                 container("ubuntu") {
                     script {
                         sh """
-                        mkdir -p \$HOME/python
-                        cd \$HOME/python
-                        # curl -L https://github.com/indygreg/python-build-standalone/releases/download/20230507/cpython-3.9.16+20230507-x86_64-unknown-linux-gnu-install_only.tar.gz | tar xz --strip-components=1
-                        #  export PATH="\$HOME/python/bin:\$PATH"
-                        # apt install -y git 
+
+
                         git clone https://github.com/shirannimni/project_k8s_jenkins.git
-                        python3 --version
-                        ls && pwd
+                    
                         pip3 install -r ./project_k8s_jenkins/src/requirements.txt
                         """
-                        sh 'ls -R $HOME/python/project_k8s_jenkins'
-                        sh 'pwd'
-                        sh "ls -la && echo $HOME"
+
                         def testResult = sh(script: 'python3 -m pytest $HOME/python/project_k8s_jenkins/src/test_app.py', returnStatus: true)
 
                     // def testResult = sh(script: '\$HOME/python/bin/python3 -m pytest ./project_k8s_jenkins/src/test_app.py', returnStatus: true)
