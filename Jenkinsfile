@@ -13,17 +13,6 @@ pipeline {
                     args:
                     - 99d
                     tty: true
-                  - name: docker
-                    image: docker:dind
-                    securityContext:
-                      privileged: true
-                    volumeMounts:
-                      - name: docker-socket
-                        mountPath: /var/run/docker.sock
-                  volumes:
-                    - name: docker-socket
-                      hostPath:
-                        path: /var/run/docker.sock
             """
         }
     }
