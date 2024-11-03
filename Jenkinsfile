@@ -72,8 +72,8 @@ pipeline {
                         git clone https://github.com/shirannimni/project_k8s_jenkins.git
                     
                         pip3 install -r ./project_k8s_jenkins/src/requirements.txt
-                        cd \$HOME/python/project_k8s_jenkins/src
-                        python3 -m pytest test_app.py -v
+                        pip3 install pytest
+                        python3 -m pytest ./project_k8s_jenkins/src/test_app.py -v
                         """
 
                         def testResult = sh(script: 'python3 -m pytest $HOME/python/project_k8s_jenkins/src/test_app.py', returnStatus: true)
